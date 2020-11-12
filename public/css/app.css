@@ -1,0 +1,22 @@
+.container {
+    margin-top: 20px;
+}
+
+.titleAd {
+    padding: 2em;
+    background-size: cover;
+    background-position: center center;
+}
+
+.titleAd h1, .titleAd p {
+    color: white;
+    text-shadow: 3px 3px 3px black;
+}
+
+.carousel-caption {
+    text-shadow: 3px 3px 3px black;
+}
+
+.carousel-caption h5 {
+    color: white;
+}
