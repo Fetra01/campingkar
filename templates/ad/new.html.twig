@@ -2,7 +2,7 @@
 
 {% block title %}Création d'une annonce{% endblock %}
 
-{% form_theme form _self %}
+{% form_theme form 'ad/_collection.html.twig' %}
 
 {% block body %}
     <div class="container">
@@ -16,4 +16,8 @@
 
         {{ form_end(form) }}
     </div>
+{% endblock %} 
+
+{% block javascripts %}
+    <script src="/js/ad.js"></script>
 {% endblock %}

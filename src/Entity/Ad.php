@@ -4,13 +4,19 @@ namespace App\Entity;
 
 use Cocur\Slugify\Slugify;
 use App\Repository\AdRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=AdRepository::class)
  * @ORM\HasLifecycleCallbacks
+ * @UniqueEntity(
+ *  fields={"title"},
+ *  message="Une autre annonce possède déja ce titre, merci de le modifier"
+ * )
  */
 class Ad
 {
@@ -20,6 +26,12 @@ class Ad
      * @ORM\Column(type="integer")
      */
     private $id;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\Length(min=10, max=250, minMessage="Le titre doit faire plus de 10 caractères !", maxMessage="Le titre ne peut pas faire plus de 255 caractères !")
+     */
+    private $title;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -38,16 +50,19 @@ class Ad
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\Length(min=10, minMessage="Votre introduction doit faire plus de 20 caractères !")
      */
     private $introduction;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\Length(min=100, minMessage="Votre description ne peut pas faire moins de 100 caractères !")
      */
     private $content;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Url()
      */
     private $coverImage;
 
@@ -63,8 +78,10 @@ class Ad
 
     /**
      * @ORM\OneToMany(targetEntity=Image::class, mappedBy="ad", orphanRemoval=true)
+     * @Assert\Valid()
      */
     private $images;
+
 
     public function __construct()
     {
@@ -83,8 +100,20 @@ class Ad
     public function initializeSlug() {
         if(empty($this->slug)) {
             $slugify = new Slugify();
-            $this->slug = $slugify->slugify($this->type);
+            $this->slug = $slugify->slugify($this->title);
         }
+    }
+    
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
+
+        return $this;
     }
 
     public function getId(): ?int

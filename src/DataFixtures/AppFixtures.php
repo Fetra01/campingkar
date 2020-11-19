@@ -17,12 +17,14 @@ class AppFixtures extends Fixture
         for($i = 1; $i <= 30; $i++){
             $ad = new Ad();
             
+            $title          = $faker->sentence();
             $type           = $faker->sentence();
             $coverImage     = $faker->imageUrl(1000,350);
             $introduction   = $faker->paragraph(2);
             $content        = '<p>' .join('</p><p>', $faker->paragraphs(5)). '</p>';
 
-            $ad->setType($type)
+            $ad->setTitle($title)
+               ->setType($type)
                ->setCoverImage($coverImage)
                ->setIntroduction($introduction)
                ->setContent($content)
